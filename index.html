@@ -1,132 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Qortara SDLC governance observability reference host">
-  <title>Qortara SDLC · Governance Observatory</title>
-  <link rel="stylesheet" href="./styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MythologIQ Labs · Documentation</title>
+<meta name="description" content="Public documentation and open-source resources from MythologIQ Labs LLC.">
+<style>
+:root{color-scheme:dark;background:#090b10;color:#eef2f6;font-family:Inter,system-ui,sans-serif}*{box-sizing:border-box}body{margin:0}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #242a35}.brand strong,.brand small{display:block}.brand small{color:#8f9aaa;margin-top:3px}nav{display:flex;gap:22px}nav a{text-decoration:none;color:#aab4c1}.hero{padding:96px 0 68px;max-width:850px}.eyebrow{font:700 11px/1.2 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.14em;color:#8894a5}h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-.05em;margin:16px 0 22px}.lede{font-size:20px;line-height:1.65;color:#aab4c1;max-width:720px}.actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}.button{padding:12px 18px;border:1px solid #333b49;text-decoration:none;border-radius:8px}.button.primary{background:#eef2f6;color:#090b10}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:20px 0 80px}.card{border:1px solid #252c38;border-radius:12px;padding:24px;background:#10141c}.card h2{margin:6px 0 10px}.card p{color:#99a5b4;line-height:1.6}.portal{border-color:#4a5362}.portal span{display:block;color:#8f9aaa;font-size:13px;margin-top:14px}footer{border-top:1px solid #242a35;padding:28px 0 42px;color:#7f8a99;font-size:13px}@media(max-width:720px){nav{display:none}.grid{grid-template-columns:1fr}.hero{padding-top:64px}}
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Qortara workspace navigation">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">Q</div>
-        <div><strong>Qortara</strong><span>SDLC Observatory</span></div>
-      </div>
-      <nav class="primary-nav" aria-label="Primary">
-        <button class="nav-item active" data-plane="overview" aria-current="page"><span>Overview</span><small>Workspace</small></button>
-        <button class="nav-item" data-plane="oversight"><span>Oversight</span><small>Observe</small></button>
-        <button class="nav-item" data-plane="compliance"><span>Compliance</span><small>Evidence</small></button>
-        <button class="nav-item" data-plane="repositories"><span>Repositories</span><small>Portfolio</small></button>
-      </nav>
-      <div class="sidebar-note">
-        <span class="eyebrow">Reference host</span>
-        <p>Static public preview of the Qortara workspace product shape.</p>
-      </div>
-    </aside>
-
-    <main id="main" class="main-content" tabindex="-1">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Governance workspace</p>
-          <h1 id="page-title">Organization overview</h1>
-          <p id="page-subtitle" class="subtitle">A public-safe view of software governance posture.</p>
-        </div>
-        <div class="topbar-actions">
-          <span class="fixture-badge">Reference fixture</span>
-          <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle color theme">◐</button>
-        </div>
-      </header>
-
-      <section class="plane active" data-plane-panel="overview">
-        <div class="hero-card">
-          <div>
-            <span class="eyebrow">Current posture</span>
-            <div class="hero-status-row">
-              <span id="overall-status" class="status-pill status-partial">Partial</span>
-              <h2>Evidence is visible, traceable, and intentionally explicit about gaps.</h2>
-            </div>
-            <p>Oversight answers what needs attention. Compliance answers what evidence exists and what remains unproven.</p>
-          </div>
-          <div class="hero-meta" aria-label="Snapshot metadata">
-            <div><span>Observed</span><strong id="observed-at">Loading…</strong></div>
-            <div><span>Repositories</span><strong id="repo-count">0</strong></div>
-            <div><span>Evidence sources</span><strong id="source-count">0</strong></div>
-          </div>
-        </div>
-
-        <div class="metric-grid" id="overview-metrics" aria-label="Governance summary metrics"></div>
-
-        <div class="two-column-grid">
-          <section class="panel">
-            <div class="panel-heading">
-              <div><span class="eyebrow">Oversight</span><h2>Attention map</h2></div>
-              <button class="text-button" data-jump="oversight">Open Oversight →</button>
-            </div>
-            <div id="attention-list" class="attention-list"></div>
-          </section>
-
-          <section class="panel">
-            <div class="panel-heading">
-              <div><span class="eyebrow">Compliance</span><h2>Evidence posture</h2></div>
-              <button class="text-button" data-jump="compliance">Open Compliance →</button>
-            </div>
-            <div id="evidence-summary" class="evidence-summary"></div>
-          </section>
-        </div>
-
-        <section class="panel repository-preview">
-          <div class="panel-heading">
-            <div><span class="eyebrow">Portfolio</span><h2>Repository posture</h2></div>
-            <button class="text-button" data-jump="repositories">View all →</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Repository</th><th>Oversight</th><th>Freshness</th><th>Compliance</th><th>Evidence</th></tr></thead>
-              <tbody id="overview-repository-rows"></tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-
-      <section class="plane" data-plane-panel="oversight" hidden>
-        <div class="section-intro">
-          <div><span class="eyebrow">Qor Oversight</span><h2>Operator attention and evidence freshness</h2></div>
-          <p>Posture, provenance, freshness, source health, and attention routing in one read-only operator surface.</p>
-        </div>
-        <div id="oversight-metrics" class="metric-grid"></div>
-        <div id="oversight-repositories" class="repo-card-grid"></div>
-      </section>
-
-      <section class="plane" data-plane-panel="compliance" hidden>
-        <div class="section-intro">
-          <div><span class="eyebrow">Qor Compliance</span><h2>Evidence posture and readiness</h2></div>
-          <p>Documentation, implementation, operating evidence, effectiveness, control relevance, and export readiness remain separate dimensions.</p>
-        </div>
-        <div id="compliance-metrics" class="metric-grid"></div>
-        <div id="compliance-repositories" class="repo-card-grid"></div>
-      </section>
-
-      <section class="plane" data-plane-panel="repositories" hidden>
-        <div class="section-intro">
-          <div><span class="eyebrow">Governed portfolio</span><h2>Public repository inventory</h2></div>
-          <p>This reference projection includes only repositories explicitly admitted to the public fixture.</p>
-        </div>
-        <div class="filter-bar">
-          <label>Filter repositories <input id="repo-filter" type="search" placeholder="Search name or state"></label>
-          <span id="filter-count" class="muted"></span>
-        </div>
-        <div id="repository-list" class="repository-list"></div>
-      </section>
-
-      <footer>
-        <span>Qortara SDLC reference host</span>
-        <span>Static projection · Public-safe fixture</span>
-      </footer>
-    </main>
-  </div>
-  <script type="module" src="./app.js"></script>
+<a href="#main" style="position:absolute;left:-9999px">Skip to content</a>
+<header>
+<div class="brand"><strong>MythologIQ Labs</strong><small>Documentation</small></div>
+<nav><a href="#products">Products</a><a href="https://github.com/MythologIQ-Labs-LLC">Open Source</a><a href="https://mythologiq.studio">Company</a></nav>
+</header>
+<main id="main">
+<section class="hero">
+<p class="eyebrow">MythologIQ Labs LLC</p>
+<h1>Documentation for intelligence you can actually own.</h1>
+<p class="lede">Public technical documentation, open-source projects, architecture overviews, standards, and product resources from MythologIQ Labs.</p>
+<div class="actions"><a class="button primary" href="#products">Explore products</a><a class="button" href="https://github.com/MythologIQ-Labs-LLC">GitHub organization</a></div>
+</section>
+<section id="products" class="grid">
+<article class="card portal"><p class="eyebrow">Enterprise governance</p><h2>Qortara</h2><p>Governance, evidence, oversight, compliance, and software-delivery visibility for AI-assisted engineering organizations.</p><a href="https://qortara.com">Qortara website →</a><span>Authenticated GitHub Pages workspace is being activated.</span></article>
+<article class="card"><p class="eyebrow">Agent observability</p><h2>FailSafe</h2><p>Evidence-oriented observability for AI-assisted development workflows.</p></article>
+<article class="card"><p class="eyebrow">Inference runtime</p><h2>GG-CORE</h2><p>Security-first, embeddable local inference infrastructure.</p></article>
+<article class="card"><p class="eyebrow">Private AI workspace</p><h2>COREFORGE</h2><p>Private AI designed around local control, memory, and user agency.</p></article>
+</section>
+</main>
+<footer>MythologIQ Labs LLC · Public documentation front door</footer>
 </body>
 </html>
