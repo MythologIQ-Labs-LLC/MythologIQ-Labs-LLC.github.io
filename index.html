@@ -1,34 +1,239 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MythologIQ Labs · Documentation</title>
-<meta name="description" content="Public documentation and open-source resources from MythologIQ Labs LLC.">
-<style>
-:root{color-scheme:dark;background:#090b10;color:#eef2f6;font-family:Inter,system-ui,sans-serif}*{box-sizing:border-box}body{margin:0}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #242a35}.brand strong,.brand small{display:block}.brand small{color:#8f9aaa;margin-top:3px}nav{display:flex;gap:22px}nav a{text-decoration:none;color:#aab4c1}.hero{padding:96px 0 68px;max-width:850px}.eyebrow{font:700 11px/1.2 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.14em;color:#8894a5}h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-.05em;margin:16px 0 22px}.lede{font-size:20px;line-height:1.65;color:#aab4c1;max-width:720px}.actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}.button{padding:12px 18px;border:1px solid #333b49;text-decoration:none;border-radius:8px}.button.primary{background:#eef2f6;color:#090b10}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:20px 0 80px}.card{border:1px solid #252c38;border-radius:12px;padding:24px;background:#10141c}.card h2{margin:6px 0 10px}.card p{color:#99a5b4;line-height:1.6}.portal{border-color:#4a5362}.portal span{display:block;color:#8f9aaa;font-size:13px;margin-top:14px}footer{border-top:1px solid #242a35;padding:28px 0 42px;color:#7f8a99;font-size:13px}@media(max-width:720px){nav{display:none}.grid{grid-template-columns:1fr}.hero{padding-top:64px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MythologIQ Labs</title>
+  <meta name="description" content="Documentation, open-source technology, architecture, and product resources from MythologIQ Labs LLC.">
+  <meta name="theme-color" content="#0C1B2A">
+  <link rel="icon" href="https://mythologiq.studio/assets/header-logo.webp">
+  <link rel="preconnect" href="https://mythologiq.studio">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<a href="#main" style="position:absolute;left:-9999px">Skip to content</a>
-<header>
-<div class="brand"><strong>MythologIQ Labs</strong><small>Documentation</small></div>
-<nav><a href="#products">Products</a><a href="https://github.com/MythologIQ-Labs-LLC">Open Source</a><a href="https://mythologiq.studio">Company</a></nav>
-</header>
-<main id="main">
-<section class="hero">
-<p class="eyebrow">MythologIQ Labs LLC</p>
-<h1>Documentation for intelligence you can actually own.</h1>
-<p class="lede">Public technical documentation, open-source projects, architecture overviews, standards, and product resources from MythologIQ Labs.</p>
-<div class="actions"><a class="button primary" href="#products">Explore products</a><a class="button" href="https://github.com/MythologIQ-Labs-LLC">GitHub organization</a></div>
-</section>
-<section id="products" class="grid">
-<article class="card portal"><p class="eyebrow">Enterprise governance</p><h2>Qortara</h2><p>Governance, evidence, oversight, compliance, and software-delivery visibility for AI-assisted engineering organizations.</p><a href="https://qortara.com">Qortara website →</a><span>Authenticated GitHub Pages workspace is being activated.</span></article>
-<article class="card"><p class="eyebrow">Agent observability</p><h2>FailSafe</h2><p>Evidence-oriented observability for AI-assisted development workflows.</p></article>
-<article class="card"><p class="eyebrow">Inference runtime</p><h2>GG-CORE</h2><p>Security-first, embeddable local inference infrastructure.</p></article>
-<article class="card"><p class="eyebrow">Private AI workspace</p><h2>COREFORGE</h2><p>Private AI designed around local control, memory, and user agency.</p></article>
-</section>
-</main>
-<footer>MythologIQ Labs LLC · Public documentation front door</footer>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand-link" href="#top" aria-label="MythologIQ Labs home">
+        <img class="brand-logo" src="https://mythologiq.studio/assets/header-logo.webp" alt="MythologIQ Labs">
+        <span class="brand-suffix">Labs</span>
+      </a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#documentation">Documentation</a>
+        <a href="#products">Products</a>
+        <a href="#open-source">Open source</a>
+        <a href="https://mythologiq.studio" rel="external">Studio</a>
+        <a class="portal-nav" href="#qortara">◈ Secure workspace</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">MythologIQ Labs LLC</p>
+          <h1>Build intelligence you can <span class="gold">actually own.</span></h1>
+          <p class="hero-copy">Technical documentation, open-source systems, architecture, and practical guidance for building AI that stays observable, governable, and under human control.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#documentation">Browse documentation →</a>
+            <a class="button" href="#open-source">Explore open source</a>
+          </div>
+        </div>
+
+        <aside class="signal-card" aria-label="MythologIQ engineering principles">
+          <span class="signal-label">Sovereignty signal</span>
+          <h2>Infrastructure with human veto power.</h2>
+          <div class="signal-list">
+            <div class="signal-row"><span>Execution</span><span class="signal-state">Auditable</span></div>
+            <div class="signal-row"><span>Memory</span><span class="signal-state">Governed</span></div>
+            <div class="signal-row"><span>Inference</span><span class="signal-state">Local-first</span></div>
+            <div class="signal-row"><span>Automation</span><span class="signal-state">Reversible</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="documentation">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Documentation</span>
+            <h2>Start with the problem you are solving.</h2>
+          </div>
+          <p>MythologIQ projects share a common philosophy, but they solve different layers of the stack. These paths organize the public material by intent rather than making you reverse-engineer our repository names.</p>
+        </div>
+
+        <div class="docs-grid">
+          <a class="doc-card" href="#governance-docs">
+            <span class="card-icon" aria-hidden="true">◇</span>
+            <h3>Governance & evidence</h3>
+            <p>Authority, policy, evidence chains, oversight, compliance, provenance, and governed delivery.</p>
+            <span class="card-link">Explore governance →</span>
+          </a>
+          <a class="doc-card" href="#memory-docs">
+            <span class="card-icon" aria-hidden="true">⌘</span>
+            <h3>Agent memory</h3>
+            <p>Durable state, correction, precedent, retrieval, authority boundaries, and interoperable memory.</p>
+            <span class="card-link">Explore memory →</span>
+          </a>
+          <a class="doc-card" href="#runtime-docs">
+            <span class="card-icon" aria-hidden="true">◌</span>
+            <h3>Local inference</h3>
+            <p>Private runtime architecture, local execution, embeddable inference, and sovereign compute.</p>
+            <span class="card-link">Explore runtime →</span>
+          </a>
+          <a class="doc-card" href="#security-docs">
+            <span class="card-icon" aria-hidden="true">⌁</span>
+            <h3>Security & privacy</h3>
+            <p>Data boundaries, redaction, privacy engineering, secure defaults, and evidence-first assurance.</p>
+            <span class="card-link">Explore security →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Product family</span>
+            <h2>Different surfaces. One operating philosophy.</h2>
+          </div>
+          <p>Public product placement is intentionally curated. This site explains what is useful to understand without turning every experiment, dependency, or internal system into a marketing claim.</p>
+        </div>
+
+        <div class="product-grid">
+          <a class="product-card" href="https://mythologiq.studio/products/failsafe" rel="external">
+            <span class="product-logo-wrap"><img class="product-logo" src="https://mythologiq.studio/assets/products/failsafe-logo.webp" alt="FailSafe logo"></span>
+            <span>
+              <span class="product-meta">AI agent observability</span>
+              <h3>FailSafe</h3>
+              <p>See what AI agents did. Replay, audit, and understand execution with evidence that remains useful after the session ends.</p>
+              <span class="card-link">Product documentation →</span>
+            </span>
+          </a>
+
+          <a class="product-card" href="https://mythologiq.studio/products/qortara" rel="external">
+            <span class="product-logo-wrap"><img class="product-logo" src="https://mythologiq.studio/assets/products/qortara.png" alt="Qortara logo"></span>
+            <span>
+              <span class="product-meta">Enterprise AI governance</span>
+              <h3>Qortara</h3>
+              <p>Governance, evidence, oversight, compliance, and software-delivery visibility for AI-assisted engineering organizations.</p>
+              <span class="card-link">Product overview →</span>
+            </span>
+          </a>
+
+          <a class="product-card" href="https://mythologiq.studio/products/gg-core" rel="external">
+            <span class="product-logo-wrap"><img class="product-logo" src="https://mythologiq.studio/assets/products/GG-CORE.webp" alt="GG-CORE logo"></span>
+            <span>
+              <span class="product-meta">Inference runtime</span>
+              <h3>GG-CORE</h3>
+              <p>Security-first, embeddable local inference infrastructure designed to keep sensitive execution under your control.</p>
+              <span class="card-link">Runtime documentation →</span>
+            </span>
+          </a>
+
+          <a class="product-card" href="https://mythologiq.studio/products/coreforge" rel="external">
+            <span class="product-logo-wrap"><img class="product-logo" src="https://mythologiq.studio/assets/products/COREFORGE.webp" alt="COREFORGE logo"></span>
+            <span>
+              <span class="product-meta">Private AI workspace</span>
+              <h3>COREFORGE</h3>
+              <p>Private AI built around local control, durable context, user agency, and practical workflows instead of platform dependency.</p>
+              <span class="card-link">Workspace overview →</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="open-source">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Open technology</span>
+            <h2>Public work worth exploring.</h2>
+          </div>
+          <p>Repositories appear here because they represent useful public technology or research, not simply because they happen to exist. The complete internal portfolio is larger and deliberately not mirrored onto this page.</p>
+        </div>
+
+        <div class="oss-grid">
+          <a class="oss-card" id="memory-docs" href="https://github.com/MythologIQ-Labs-LLC/agent-memory">
+            <span class="oss-tag">Memory</span>
+            <h3>Agent Memory</h3>
+            <p>A governed memory architecture for agents, including durable state, correction, retrieval, precedent, and explicit authority boundaries.</p>
+            <span class="card-link">Read the project →</span>
+          </a>
+          <a class="oss-card" id="governance-docs" href="https://github.com/MythologIQ-Labs-LLC/Qor-logic">
+            <span class="oss-tag">Governance</span>
+            <h3>Qor Logic</h3>
+            <p>Evidence-oriented lifecycle and governance logic designed to make AI-assisted execution reviewable rather than merely plausible.</p>
+            <span class="card-link">Read the project →</span>
+          </a>
+          <a class="oss-card" href="https://github.com/MythologIQ-Labs-LLC/CodeGenome">
+            <span class="oss-tag">Code intelligence</span>
+            <h3>CodeGenome</h3>
+            <p>Structural code intelligence and repository analysis work focused on understanding systems beyond surface-level text matching.</p>
+            <span class="card-link">Read the project →</span>
+          </a>
+          <a class="oss-card" id="security-docs" href="https://github.com/MythologIQ-Labs-LLC/presidio-rs">
+            <span class="oss-tag">Privacy</span>
+            <h3>presidio-rs</h3>
+            <p>Rust-oriented privacy and redaction infrastructure for performance-sensitive, local, and governed AI pipelines.</p>
+            <span class="card-link">Read the project →</span>
+          </a>
+          <a class="oss-card" href="https://github.com/MythologIQ-Labs-LLC/CritIQ">
+            <span class="oss-tag">Evaluation</span>
+            <h3>CritIQ</h3>
+            <p>Evaluation and critique tooling for making model and agent behavior easier to interrogate, compare, and improve.</p>
+            <span class="card-link">Read the project →</span>
+          </a>
+          <a class="oss-card" id="runtime-docs" href="https://github.com/MythologIQ-Labs-LLC/GG-CORE">
+            <span class="oss-tag">Runtime</span>
+            <h3>GG-CORE</h3>
+            <p>The open runtime layer behind MythologIQ's local-inference direction, designed for private and embeddable execution.</p>
+            <span class="card-link">Read the source →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="portal-section" id="qortara">
+      <div class="shell portal-shell">
+        <div class="portal-copy">
+          <div class="portal-brand">
+            <img class="portal-logo" src="https://mythologiq.studio/assets/products/qortara.png" alt="Qortara">
+            <span><strong>Qortara</strong><small>by MythologIQ Labs</small></span>
+          </div>
+          <span class="portal-lock">◈ Authenticated workspace</span>
+          <h2>Enter the governed system.</h2>
+          <p>The public documentation ends here. Authorized users enter the Qortara SDLC workspace for live governance visibility, evidence, compliance, oversight, CI state, roadmaps, project review, provenance, and organizational operations.</p>
+          <div class="hero-actions">
+            <a class="button gold" href="__QORTARA_PAGES_URL__" data-qortara-portal>Open Qortara →</a>
+            <a class="button" href="https://qortara.com" rel="external">About Qortara</a>
+          </div>
+        </div>
+        <div class="portal-capabilities" aria-label="Qortara workspace capabilities">
+          <div class="portal-capability">Oversight · attention · operational posture</div>
+          <div class="portal-capability">Compliance · evidence · control readiness</div>
+          <div class="portal-capability">CI gates · release state · provenance</div>
+          <div class="portal-capability">Roadmap · project topology · dependencies</div>
+          <div class="portal-capability">Agents · integrations · governed interaction</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>© 2026 MythologIQ Labs LLC</span>
+      <span class="footer-links">
+        <a href="https://mythologiq.studio">MythologIQ Studio</a>
+        <a href="https://github.com/MythologIQ-Labs-LLC">GitHub</a>
+        <a href="https://mythologiq.studio/accessibility">Accessibility</a>
+      </span>
+    </div>
+  </footer>
 </body>
 </html>
