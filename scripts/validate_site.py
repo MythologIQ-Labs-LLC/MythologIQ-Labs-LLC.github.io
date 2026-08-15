@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+from urllib.parse import urlparse
 
 root = Path(__file__).resolve().parents[1]
 html = (root / "index.html").read_text(encoding="utf-8")
@@ -38,10 +39,11 @@ match = re.search(r'<a class="button gold" href="([^"]+)" data-qortara-portal>',
 assert match, "missing Qortara portal link"
 portal = match.group(1)
 assert portal != "__QORTARA_PAGES_URL__", "Qortara portal URL has not been resolved"
-assert portal.startswith("https://"), "Qortara portal must use HTTPS"
-assert "github.com" not in portal, "Qortara portal must not be a repository URL"
-assert portal.rstrip("/") != "https://qortara.com", "Qortara portal must not be the public marketing site"
-assert "pages.github.io" in portal, "current Qortara portal must resolve to the authenticated GitHub Pages host"
+parsed_portal = urlparse(portal)
+assert parsed_portal.scheme == "https", "Qortara portal must use HTTPS"
+assert parsed_portal.hostname == "upgraded-lamp-y89lq1o.pages.github.io", "Qortara portal must resolve to the exact authenticated GitHub Pages host"
+assert parsed_portal.path in ("", "/"), "Qortara portal must enter at the authenticated workspace root"
+assert not parsed_portal.params and not parsed_portal.query and not parsed_portal.fragment, "Qortara portal URL must not contain extra routing state"
 
 assert "prefers-reduced-motion" in css, "reduced-motion support is required"
 assert "@media" in css and "max-width" in css, "responsive rules are required"
