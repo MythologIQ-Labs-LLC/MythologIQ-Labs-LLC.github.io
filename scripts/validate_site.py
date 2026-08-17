@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 root = Path(__file__).resolve().parents[1]
 html = (root / "index.html").read_text(encoding="utf-8")
 css = (root / "styles.css").read_text(encoding="utf-8")
+hierarchy_css = (root / "qortara-hierarchy.css").read_text(encoding="utf-8")
 html_lower = html.lower()
 
 required_html = [
@@ -53,9 +54,41 @@ assert not parsed_portal.params and not parsed_portal.query and not parsed_porta
 assert html_lower.count("data-qortara-portal") == 1, "only the Secure Workspace control may enter the private Qortara workspace"
 assert "<strong>qor oversight</strong>" not in html_lower, "repository/source identity must not be the public SDLC module label"
 assert "<strong>qor compliance</strong>" not in html_lower, "repository/source identity must not be the public SDLC module label"
-assert "qortara agent governance</strong> · sibling product" in html_lower, "Agent Governance must be presented as a sibling product"
+assert "qortara agent governance</h3>" in html_lower, "Agent Governance sibling product must be visible"
 assert "not a qortara sdlc module" in html_lower, "Agent Governance must not be presented as an SDLC module"
-assert "prefers-reduced-motion" in css, "reduced-motion support is required"
-assert "@media" in css and "max-width" in css, "responsive rules are required"
+
+# Product hierarchy is semantic structure, not a decorative flat list.
+assert 'class="qortara-hierarchy" role="tree"' in html_lower, "Qortara public composition must render as a hierarchy tree"
+assert 'data-product-family="qortara"' in html_lower, "Qortara must be the family root"
+assert 'data-product="qortara-sdlc"' in html_lower, "Qortara SDLC must be a child product"
+assert 'data-product="qortara-agent-governance"' in html_lower, "Agent Governance must be a sibling product"
+assert 'aria-label="qortara sdlc modules"' in html_lower, "SDLC module group must be explicit"
+
+modules = [
+    "development",
+    "governance",
+    "oversight",
+    "compliance",
+    "evidence",
+    "operations",
+    "administration",
+]
+for module in modules:
+    token = f'data-sdlc-module="{module}"'
+    assert html_lower.count(token) == 1, f"SDLC module must appear exactly once in the SDLC branch: {module}"
+
+sdlc_start = html_lower.index('data-product="qortara-sdlc"')
+agent_start = html_lower.index('data-product="qortara-agent-governance"')
+assert sdlc_start < agent_start, "SDLC branch must be structurally distinct from the Agent Governance sibling"
+for module in modules:
+    module_pos = html_lower.index(f'data-sdlc-module="{module}"')
+    assert sdlc_start < module_pos < agent_start, f"{module} must be nested beneath Qortara SDLC, not flattened beside sibling products"
+
+assert "qortara-product-branches" in hierarchy_css, "hierarchy stylesheet must render product branches"
+assert "qortara-module-branch" in hierarchy_css, "hierarchy stylesheet must render the SDLC module branch"
+assert "prefers-reduced-motion" in hierarchy_css, "hierarchy styling must preserve reduced-motion support"
+assert "@media" in hierarchy_css and "max-width" in hierarchy_css, "hierarchy styling must remain responsive"
+assert "prefers-reduced-motion" in css, "base reduced-motion support is required"
+assert "@media" in css and "max-width" in css, "base responsive rules are required"
 
 print("MythologIQ Labs Pages validation passed")
