@@ -16,8 +16,13 @@ required_html = [
     'id="qortara"',
     "secure workspace",
     "qortara sdlc",
-    "qor oversight",
-    "qor compliance",
+    "development",
+    "governance",
+    "oversight",
+    "compliance",
+    "evidence",
+    "operations",
+    "administration",
     "qortara agent governance",
     "provenance",
 ]
@@ -46,6 +51,10 @@ assert parsed_portal.path in ("", "/"), "Secure Workspace must enter at the auth
 assert not parsed_portal.params and not parsed_portal.query and not parsed_portal.fragment, "Secure Workspace URL must not contain extra routing state"
 
 assert html_lower.count("data-qortara-portal") == 1, "only the Secure Workspace control may enter the private Qortara workspace"
+assert "<strong>qor oversight</strong>" not in html_lower, "repository/source identity must not be the public SDLC module label"
+assert "<strong>qor compliance</strong>" not in html_lower, "repository/source identity must not be the public SDLC module label"
+assert "qortara agent governance</strong> · sibling product" in html_lower, "Agent Governance must be presented as a sibling product"
+assert "not a qortara sdlc module" in html_lower, "Agent Governance must not be presented as an SDLC module"
 assert "prefers-reduced-motion" in css, "reduced-motion support is required"
 assert "@media" in css and "max-width" in css, "responsive rules are required"
 
