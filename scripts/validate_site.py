@@ -7,6 +7,7 @@ html = (root / "index.html").read_text(encoding="utf-8")
 css = (root / "styles.css").read_text(encoding="utf-8")
 hierarchy_css = (root / "qortara-hierarchy.css").read_text(encoding="utf-8")
 html_lower = html.lower()
+hierarchy_css_lower = hierarchy_css.lower()
 
 required_html = [
     "mythologiq labs llc",
@@ -84,8 +85,15 @@ for module in modules:
     module_pos = html_lower.index(f'data-sdlc-module="{module}"')
     assert sdlc_start < module_pos < agent_start, f"{module} must be nested beneath Qortara SDLC, not flattened beside sibling products"
 
-assert "qortara-product-branches" in hierarchy_css, "hierarchy stylesheet must render product branches"
-assert "qortara-module-branch" in hierarchy_css, "hierarchy stylesheet must render the SDLC module branch"
+# Layout regression guards. The hierarchy stylesheet loads after the base stylesheet
+# and must reclaim full width from the legacy two-column portal shell.
+assert './qortara-hierarchy.css' in html_lower, "Qortara hierarchy stylesheet must be loaded"
+assert ".portal-shell" in hierarchy_css_lower, "hierarchy stylesheet must override the portal shell"
+assert "grid-template-columns: minmax(0, 1fr);" in hierarchy_css, "Qortara hierarchy must not be trapped in the legacy narrow side column"
+assert "overflow-wrap: anywhere;" in hierarchy_css, "hierarchy text must have a safe wrapping rule"
+assert "repeat(2, minmax(0, 1fr))" in hierarchy_css, "desktop hierarchy should use responsive equal-width product/module columns"
+assert ".qortara-product-branches::before" not in hierarchy_css, "decorative product connector lines are prohibited after overlap regression"
+assert ".qortara-module-node::before" not in hierarchy_css, "decorative module connector lines are prohibited after overlap regression"
 assert "prefers-reduced-motion" in hierarchy_css, "hierarchy styling must preserve reduced-motion support"
 assert "@media" in hierarchy_css and "max-width" in hierarchy_css, "hierarchy styling must remain responsive"
 assert "prefers-reduced-motion" in css, "base reduced-motion support is required"
