@@ -9,6 +9,7 @@
   <link rel="icon" href="https://mythologiq.studio/assets/header-logo.webp">
   <link rel="preconnect" href="https://mythologiq.studio">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./qortara-hierarchy.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -120,8 +121,8 @@
             <span>
               <span class="product-meta">Governed engineering family</span>
               <h3>Qortara</h3>
-              <p>A product family that includes Qortara SDLC and Qortara Agent Governance. Qortara SDLC composes customer-facing development, governance, oversight, compliance, evidence, operations, and administration modules.</p>
-              <span class="card-link">Explore Qortara products and modules ↓</span>
+              <p>A product family containing distinct products. Qortara SDLC composes customer-facing development, governance, oversight, compliance, evidence, operations, and administration modules beneath the SDLC product.</p>
+              <span class="card-link">Explore the Qortara structure ↓</span>
             </span>
           </a>
 
@@ -207,22 +208,45 @@
             <span><strong>Qortara</strong><small>by MythologIQ Labs</small></span>
           </div>
           <span class="portal-lock">Qortara product family</span>
-          <h2>Products and modules. Explicit boundaries.</h2>
-          <p>Qortara contains sibling products with distinct authority. Qortara SDLC is the governed software-delivery product and composes its own customer-facing modules. Qortara Agent Governance is a separate sibling product for runtime-agent governance. Private operational work is entered only through the Secure Workspace control in the site header.</p>
+          <h2>A family, products, then modules.</h2>
+          <p>Qortara is the product family. Qortara SDLC and Qortara Agent Governance are sibling products with distinct authority. The SDLC product then composes its customer-facing modules beneath it. Private operational work is entered only through the Secure Workspace control in the site header.</p>
           <div class="hero-actions">
             <a class="button" href="https://qortara.com" rel="external">About Qortara</a>
           </div>
         </div>
-        <div class="portal-capabilities" aria-label="Qortara products and Qortara SDLC modules">
-          <div class="portal-capability"><strong>Qortara SDLC</strong> · governed software-delivery product composed from customer-facing modules with source authority preserved behind them.</div>
-          <div class="portal-capability"><strong>Development</strong> · planning, portfolio and repository topology, work, lifecycle, capacity, execution, CI, review, and release-candidate context.</div>
-          <div class="portal-capability"><strong>Governance</strong> · authority, policy, actors, claims, obligations, reviews, protected surfaces, approvals, and governed action handoff.</div>
-          <div class="portal-capability"><strong>Oversight</strong> · read-only operational observability, provenance, freshness, execution telemetry, attention, trends, and drill-down.</div>
-          <div class="portal-capability"><strong>Compliance</strong> · compliance evidence posture, control relevance, documentation lifecycle, reporting, packages, and exports.</div>
-          <div class="portal-capability"><strong>Evidence</strong> · exact revisions, provenance, receipts, verification, completeness, correction history, and supporting proof.</div>
-          <div class="portal-capability"><strong>Operations</strong> · release readiness, rollout and rollback, incidents, runtime and integration health, orchestration, retries, and reconciliation.</div>
-          <div class="portal-capability"><strong>Administration</strong> · organization configuration, modules, integrations, providers, access context, installation, upgrades, diagnostics, and offboarding.</div>
-          <div class="portal-capability"><strong>Qortara Agent Governance</strong> · sibling product for runtime-agent policy, identity, trust, enforcement evidence, receipts, and governed agent operations; not a Qortara SDLC module.</div>
+
+        <div class="qortara-hierarchy" role="tree" aria-label="Qortara product and module hierarchy">
+          <div class="qortara-root-node" role="treeitem" aria-expanded="true" data-product-family="qortara">
+            <span class="qortara-node-type">Product family</span>
+            <strong>Qortara</strong>
+            <p>Shared family identity above independently authoritative products.</p>
+          </div>
+
+          <div class="qortara-product-branches" role="group">
+            <section class="qortara-product-node sdlc" role="treeitem" aria-expanded="true" data-product="qortara-sdlc">
+              <span class="qortara-node-type">Product</span>
+              <h3>Qortara SDLC</h3>
+              <p>Governed software-delivery lifecycle product. Its modules organize the customer experience without replacing their underlying source authorities.</p>
+
+              <div class="qortara-module-branch" role="group" aria-label="Qortara SDLC modules">
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="development"><strong>Development</strong><span>Planning, topology, work, lifecycle, capacity, execution, CI, review, and release preparation.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="governance"><strong>Governance</strong><span>Authority, policy, actors, obligations, approvals, protected operations, and governed action handoff.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="oversight"><strong>Oversight</strong><span>Read-only observability, provenance, freshness, telemetry, attention, trends, and drill-down.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="compliance"><strong>Compliance</strong><span>Applicable compliance posture, control relevance, evidence lifecycle, reporting, packages, and exports.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="evidence"><strong>Evidence</strong><span>Exact revisions, provenance, receipts, verification, completeness, correction history, and supporting proof.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="operations"><strong>Operations</strong><span>Release readiness, staging, rollout, rollback, incidents, runtime health, orchestration, retries, and recovery.</span></div>
+                <div class="qortara-module-node" role="treeitem" data-sdlc-module="administration"><strong>Administration</strong><span>Organization configuration, modules, integrations, providers, access context, installation, diagnostics, and offboarding.</span></div>
+              </div>
+            </section>
+
+            <section class="qortara-product-node agent-governance" role="treeitem" data-product="qortara-agent-governance">
+              <span class="qortara-node-type">Sibling product</span>
+              <h3>Qortara Agent Governance</h3>
+              <p>Runtime-agent policy, identity, trust, enforcement evidence, receipts, and governed agent operations. It is not a Qortara SDLC module.</p>
+            </section>
+          </div>
+
+          <p class="qortara-hierarchy-note">This public hierarchy shows product composition, not repository ownership. Source systems retain their own semantic authority behind these customer-facing modules.</p>
         </div>
       </div>
     </section>
