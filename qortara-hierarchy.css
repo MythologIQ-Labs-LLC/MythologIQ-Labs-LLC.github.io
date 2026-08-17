@@ -1,0 +1,222 @@
+/* Qortara public product hierarchy.
+   This stylesheet intentionally models product/module relationships rather than
+   repository/source topology. Source authority remains documented elsewhere. */
+
+.qortara-hierarchy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.35rem;
+  margin-top: 2.4rem;
+}
+
+.qortara-root-node,
+.qortara-product-node,
+.qortara-module-node {
+  border: 1px solid rgba(148, 163, 184, .14);
+  background: rgba(2, 4, 8, .5);
+}
+
+.qortara-root-node {
+  position: relative;
+  max-width: 520px;
+  margin-inline: auto;
+  padding: 1.25rem 1.4rem;
+  border-color: rgba(255, 184, 76, .32);
+  border-radius: 1rem;
+  text-align: center;
+  background: linear-gradient(145deg, rgba(255,184,76,.12), rgba(2,4,8,.56));
+}
+
+.qortara-root-node::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 1.35rem;
+  background: rgba(255, 184, 76, .36);
+}
+
+.qortara-node-type {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--gold);
+  font: 800 .62rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.qortara-root-node strong,
+.qortara-product-node h3,
+.qortara-module-node strong {
+  color: var(--white);
+}
+
+.qortara-root-node strong {
+  display: block;
+  font-size: 1.35rem;
+}
+
+.qortara-root-node p,
+.qortara-product-node p,
+.qortara-module-node span {
+  margin: .45rem 0 0;
+  color: #aeb8c6;
+  line-height: 1.5;
+}
+
+.qortara-product-branches {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 2.35fr) minmax(250px, .75fr);
+  gap: 1.25rem;
+  padding-top: 1.35rem;
+}
+
+.qortara-product-branches::before {
+  content: "";
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 0;
+  height: 1px;
+  background: rgba(148, 163, 184, .22);
+}
+
+.qortara-product-node {
+  position: relative;
+  padding: 1.25rem;
+  border-radius: 1rem;
+}
+
+.qortara-product-node::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: 1.35rem;
+  background: rgba(148, 163, 184, .22);
+}
+
+.qortara-product-node.sdlc {
+  border-color: rgba(0, 214, 251, .24);
+  background: linear-gradient(150deg, rgba(0,214,251,.075), rgba(2,4,8,.5));
+}
+
+.qortara-product-node.agent-governance {
+  align-self: start;
+  border-color: rgba(255, 184, 76, .18);
+}
+
+.qortara-product-node h3 {
+  margin: .2rem 0 .4rem;
+  font-size: 1.35rem;
+}
+
+.qortara-module-branch {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+  margin-top: 1.55rem;
+  padding-top: 1.15rem;
+}
+
+.qortara-module-branch::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: .8rem;
+  background: rgba(0, 214, 251, .28);
+}
+
+.qortara-module-branch::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: .8rem;
+  height: 1px;
+  background: rgba(0, 214, 251, .18);
+}
+
+.qortara-module-node {
+  position: relative;
+  z-index: 1;
+  min-height: 104px;
+  padding: .85rem .9rem;
+  border-radius: .8rem;
+}
+
+.qortara-module-node::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: .36rem;
+  background: rgba(0, 214, 251, .18);
+}
+
+.qortara-module-node strong {
+  display: block;
+  font-size: .93rem;
+}
+
+.qortara-module-node span {
+  display: block;
+  font-size: .8rem;
+}
+
+.qortara-hierarchy-note {
+  margin: .15rem auto 0;
+  max-width: 760px;
+  color: rgba(246,248,255,.52);
+  font-size: .78rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .qortara-product-branches {
+    grid-template-columns: 1fr;
+  }
+
+  .qortara-product-branches::before {
+    left: 50%;
+    right: auto;
+    width: 1px;
+    bottom: 0;
+    height: 100%;
+    background: rgba(148,163,184,.16);
+  }
+
+  .qortara-product-node {
+    z-index: 1;
+    background: rgba(2,4,8,.9);
+  }
+}
+
+@media (max-width: 620px) {
+  .qortara-module-branch {
+    grid-template-columns: 1fr;
+  }
+
+  .qortara-module-branch::after {
+    display: none;
+  }
+
+  .qortara-module-node::before {
+    left: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qortara-hierarchy * {
+    scroll-behavior: auto;
+  }
+}
