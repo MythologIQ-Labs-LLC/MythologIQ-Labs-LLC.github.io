@@ -51,18 +51,31 @@ function selectOptions(select,values,pretty){for(const v of [...new Set(values)]
 try{
  const response=await fetch("./benchmark-snapshot.json",{cache:"no-store"});if(!response.ok)throw Error("Evidence snapshot could not be loaded (HTTP "+response.status+").");
  const data=await response.json();
- if(data.schema_version!=="public-docs-1"||typeof data.snapshot_id!=="string"||data.ranked_count!==58||!Array.isArray(data.ranked)||data.ranked.length!==58||!Array.isArray(data.coverage)||!/^([a-f0-9]{40})$/.test(data.source_commit))throw Error("Malformed or unexpected evidence snapshot, refused.");
+ if(data.schema_version!=="public-docs-1"||typeof data.snapshot_id!=="string"||!Array.isArray(data.ranked)||!data.ranked.length||data.ranked_count!==data.ranked.length||!Array.isArray(data.coverage)||!/^([a-f0-9]{40})$/.test(data.source_commit))throw Error("Malformed or unexpected evidence snapshot, refused.");
  if(data.ranked.some(r=>r.systems.length<2||r.systems.some(s=>!Number.isFinite(s.value)||s.value<0)||!Number.isFinite(r.gap)||r.gap<0||r.context?.adequacy!=="threshold_not_established"))throw Error("Snapshot contains unqualified numerical claims, refused.");
  selectOptions($("benchmark-family"),data.ranked.map(r=>r.benchmark),v=>benchmarkNames[v]||v);
  selectOptions($("benchmark-dimension"),data.ranked.map(r=>r.dimension));
- const versions=data.ranked.map(r=>Number((r.profile.match(/-v(\d+)/)||[])[1]||0));const latest=Math.max(...versions);
- const stat=$("benchmark-stats");stat.append(headline(data.ranked.length,"Ranked historical metric contexts"),headline(Object.keys(data.comparison_row_counts).reduce((n,k)=>n+data.comparison_row_counts[k],0),"All eligible and ineligible contexts"),headline(data.metric_coverage_count,"Catalog metric definitions"),headline(new Set(data.ranked.map(r=>r.benchmark)).size,"Families with accepted direct comparisons"));
+ const laneVersion=r=>Number((r.profile.match(/-v(\d+)/)||[])[1]||0);
+ const laneFamily=r=>[r.benchmark,r.profile.replace(/-v\d+(?=[:/]|$)/,"-v*"),r.dimension,r.metric].join("|");
+ const latestPerLane=new Map();
+ for(const row of data.ranked){const key=laneFamily(row);latestPerLane.set(key,Math.max(latestPerLane.get(key)||0,laneVersion(row)));}
+ const systemIds=(role,rows)=>new Set(rows.flatMap(r=>r.systems.filter(s=>s.role===role).map(s=>s.id)));
+ const external=systemIds("external_competitor",data.ranked),controls=systemIds("control",data.ranked);
+ const stat=$("benchmark-stats");stat.append(headline(external.size,"Distinct external memory systems"),headline(controls.size,"Non-product control baselines"),headline(data.ranked.length,"Ranked historical metric contexts"),headline(new Set(data.ranked.map(r=>r.benchmark)).size,"Measured benchmark families"),headline(data.metric_coverage_count,"Catalog metric definitions"));
+ const summary=$("benchmark-peer-coverage");
+ summary.textContent=external.size+" distinct external memory "+(external.size===1?"system has":"systems have")+" accepted same-harness comparisons in this historical snapshot: "+([...external].map(friendlySystem).join(", ")||"none")+". "+controls.size+" non-product control "+(controls.size===1?"baseline is":"baselines are")+" tracked separately.";
+ const families=$("benchmark-peer-by-family");
+ for(const family of [...new Set(data.ranked.map(r=>r.benchmark))].sort()){
+   const rows=data.ranked.filter(r=>r.benchmark===family);
+   const peers=systemIds("external_competitor",rows),baselines=systemIds("control",rows);
+   families.append(E("p","subtle",(benchmarkNames[family]||family)+": "+rows.length+" eligible metric charts · "+peers.size+" distinct external peer"+(peers.size===1?"":"s")+" ("+([...peers].map(friendlySystem).join(", ")||"none")+") · "+baselines.size+" control "+(baselines.size===1?"system":"systems")));
+ }
  function render(){
    const fam=$("benchmark-family").value,dim=$("benchmark-dimension").value,lane=$("benchmark-lanes").value,query=$("benchmark-search").value.trim().toLowerCase(),showControls=$("benchmark-controls").checked;
-   const rows=data.ranked.filter(r=>(!fam||r.benchmark===fam)&&(!dim||r.dimension===dim)&&(lane==="all"||Number((r.profile.match(/-v(\d+)/)||[])[1]||0)===latest)&&(!query||[r.metric,r.profile,r.benchmark,...r.systems.map(s=>s.id)].join(" ").toLowerCase().includes(query)));
+   const rows=data.ranked.filter(r=>(!fam||r.benchmark===fam)&&(!dim||r.dimension===dim)&&(lane==="all"||laneVersion(r)===latestPerLane.get(laneFamily(r)))&&(!query||[r.metric,r.profile,r.benchmark,...r.systems.map(s=>s.id)].join(" ").toLowerCase().includes(query)));
    grid.replaceChildren();for(const row of rows)grid.append(addMetric(row,data,showControls));
    if(!rows.length)grid.append(E("p","empty","No accepted direct comparisons match these filters. This does not mean a score of zero."));
-   $("benchmark-count").textContent=rows.length+" metric charts shown · "+(lane==="latest"?"latest registered generation v"+latest+" in the historical snapshot":"all accepted historical generations")+" · "+(showControls?"including lexical controls":"lexical controls hidden");
+   $("benchmark-count").textContent=rows.length+" metric charts shown · "+(lane==="latest"?"latest accepted generation per native metric in the historical snapshot":"all accepted historical generations")+" · "+(showControls?"including lexical controls":"lexical controls hidden");
  }
  for(const id of ["benchmark-family","benchmark-dimension","benchmark-lanes","benchmark-controls"])$(id).addEventListener("change",render);
  $("benchmark-search").addEventListener("input",render);render();
