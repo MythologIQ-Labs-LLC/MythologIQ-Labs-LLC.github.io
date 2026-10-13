@@ -427,6 +427,60 @@ window.MYTHO_PROJECTS = [
     "benchmarks": [
       "Project-local conformance only; no shared benchmark claim"
     ]
+  },
+  {
+    "slug": "qor-logic",
+    "name": "QOR Logic",
+    "category": "Governed engineering",
+    "subtitle": "Foundational policy evaluation and repository hardening tooling",
+    "summary": "An engineering governance repository and source of hardening/review workflows, distinct from the current Qortara Logic product.",
+    "repo": "Qor-logic",
+    "principles": [
+      "Deterministic governance",
+      "Independent challenge and remediation",
+      "Review exact evidence, not labels"
+    ],
+    "goals": [
+      "Maintain practical repository hardening tools",
+      "Improve governed review workflows",
+      "Preserve useful source ancestry across product migrations"
+    ],
+    "integrations": [
+      "QOR Harden and roadmap skills",
+      "GitHub repository governance workflows"
+    ],
+    "benchmarks": [
+      "Engineering conformance tracked in-source",
+      "Do not infer product-level release qualification from source tests"
+    ]
+  },
+  {
+    "slug": "this-voice-thing",
+    "name": "This Voice Thing",
+    "category": "Applications",
+    "subtitle": "Local voice synthesis and live-audio workflow experiments",
+    "summary": "An experimental application exploring local TTS engines, live audio routing, effects, and accent design. Source is published under the individual developer account.",
+    "repo": null,
+    "repoUrl": "https://github.com/Knapp-Kevin/this-voice-thing",
+    "principles": [
+      "Local-first voice processing",
+      "Respect platform and device limitations",
+      "Separate model capabilities from UI claims"
+    ],
+    "goals": [
+      "Improve streaming TTS workflows",
+      "Experiment with an Accent Design Studio",
+      "Qualify integration with live audio applications"
+    ],
+    "integrations": [
+      "Chatterbox-derived interfaces",
+      "Local models from Hugging Face",
+      "Discord/Zoom/OBS integrations are implementation-dependent"
+    ],
+    "benchmarks": [
+      "Latency and synthesis quality vary by model and hardware",
+      "Accent fidelity requires separately validated listening tests"
+    ]
   }
 ];
 window.MYTHO_PROJECT_UPDATED = "2026-10-13";
