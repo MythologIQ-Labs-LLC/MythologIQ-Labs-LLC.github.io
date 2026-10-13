@@ -56,7 +56,7 @@ try{
  selectOptions($("benchmark-family"),data.ranked.map(r=>r.benchmark),v=>benchmarkNames[v]||v);
  selectOptions($("benchmark-dimension"),data.ranked.map(r=>r.dimension));
  const laneVersion=r=>Number((r.profile.match(/-v(\d+)/)||[])[1]||0);
- const laneFamily=r=>r.benchmark+"|"+r.profile.replace(/-v\d+(?=[:/]|$)/,"-v*");
+ const laneFamily=r=>[r.benchmark,r.profile.replace(/-v\d+(?=[:/]|$)/,"-v*"),r.dimension,r.metric].join("|");
  const latestPerLane=new Map();
  for(const row of data.ranked){const key=laneFamily(row);latestPerLane.set(key,Math.max(latestPerLane.get(key)||0,laneVersion(row)));}
  const systemIds=(role,rows)=>new Set(rows.flatMap(r=>r.systems.filter(s=>s.role===role).map(s=>s.id)));
@@ -75,7 +75,7 @@ try{
    const rows=data.ranked.filter(r=>(!fam||r.benchmark===fam)&&(!dim||r.dimension===dim)&&(lane==="all"||laneVersion(r)===latestPerLane.get(laneFamily(r)))&&(!query||[r.metric,r.profile,r.benchmark,...r.systems.map(s=>s.id)].join(" ").toLowerCase().includes(query)));
    grid.replaceChildren();for(const row of rows)grid.append(addMetric(row,data,showControls));
    if(!rows.length)grid.append(E("p","empty","No accepted direct comparisons match these filters. This does not mean a score of zero."));
-   $("benchmark-count").textContent=rows.length+" metric charts shown · "+(lane==="latest"?"latest accepted generation per benchmark lane in the historical snapshot":"all accepted historical generations")+" · "+(showControls?"including lexical controls":"lexical controls hidden");
+   $("benchmark-count").textContent=rows.length+" metric charts shown · "+(lane==="latest"?"latest accepted generation per native metric in the historical snapshot":"all accepted historical generations")+" · "+(showControls?"including lexical controls":"lexical controls hidden");
  }
  for(const id of ["benchmark-family","benchmark-dimension","benchmark-lanes","benchmark-controls"])$(id).addEventListener("change",render);
  $("benchmark-search").addEventListener("input",render);render();
