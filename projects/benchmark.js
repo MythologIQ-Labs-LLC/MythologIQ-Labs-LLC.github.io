@@ -48,9 +48,97 @@ function addMetric(row,data,showControls){
   const links=E("div","");for(const sys of row.systems){if(!escapeSourcePath(sys.source))continue;const a=E("a","",friendlySystem(sys.id)+" source ↗");a.href="https://github.com/MythologIQ-Labs-LLC/agent-memory/blob/"+encodeURIComponent(data.source_commit)+"/"+sys.source;a.rel="noopener noreferrer";links.append(a,E("span",""," · "))}info.append(links);box.append(info);return box;
 }
 function selectOptions(select,values,pretty){for(const v of [...new Set(values)].filter(Boolean).sort()){const item=E("option","",pretty?pretty(v):v);item.value=v;select.append(item)}}
+/* Latest accepted projections are fetched at view time from Agent Memory main.
+   No Actions job or scheduled cross-repository snapshot sync is required. */
+const LIVE="https://raw.githubusercontent.com/MythologIQ-Labs-LLC/agent-memory/main/reports/benchmarks/ui/";
+const SNAPSHOT_FALLBACK="./benchmark-snapshot.json";
+const invariant=(ok,reason)=>{if(!ok)throw Error("Live evidence refused: "+reason)};
+function fromFrontier(frontier){
+  invariant(frontier&&frontier.schema_version==="0.2.0"&&frontier.authority_effect==="none"&&frontier.aggregate_score===null,"schema or authority");
+  invariant(typeof frontier.snapshot_id==="string"&&frontier.snapshot_id&&Array.isArray(frontier.leaderboards)&&Array.isArray(frontier.metric_coverage),"missing projection identity");
+  const commit=frontier.snapshot?.evidence_revision;
+  invariant(typeof commit==="string"&&/^[a-f0-9]{40}$/.test(commit),"missing immutable accepted evidence commit");
+  const rows=[];
+  for(const r of frontier.leaderboards){
+    if(r.ranking_state!=="ranked")continue;
+    invariant(r.evidence_class==="same_harness"&&r.comparison_state==="exact"&&Array.isArray(r.ranking)&&r.ranking.length>=2&&
+      Number.isFinite(r.gap_to_leader_native)&&r.gap_to_leader_native>=0&&
+      typeof r.metric_key==="string"&&typeof r.comparison_set_id==="string"&&
+      ["higher_better","lower_better","zero_target"].includes(r.direction)&&
+      r.adequacy?.state==="threshold_not_established","ineligible row presented as ranked");
+    const observed=r.ranking.map(x=>{
+      invariant(x&&["subject","external_competitor","control"].includes(x.role)&&typeof x.system_id==="string"&&
+        Number.isFinite(x.value)&&x.value>=0&&Number.isInteger(x.rank)&&x.rank>=1&&
+        typeof x.revision==="string"&&x.revision,"invalid ranked system");
+      const source=(x.evidence||[]).find(e=>typeof e.uri==="string"&&escapeSourcePath(e.uri));
+      return {id:x.system_id,role:x.role,value:x.value,rank:x.rank,revision:x.revision,source:source?.uri||null};
+    });
+    invariant(observed.filter(s=>s.role==="subject").length===1,"ranked row requires one Agent Memory subject");
+    const values=observed.map(s=>s.value);
+    const best=r.direction==="higher_better"?Math.max(...values):Math.min(...values);
+    const agent=observed.find(s=>s.role==="subject").value;
+    const gap=r.direction==="higher_better"?best-agent:agent-best;
+    invariant(Math.abs(gap-r.gap_to_leader_native)<1e-7,"native frontier gap inconsistent");
+    rows.push({
+      id:r.metric_key+"|"+r.comparison_set_id,
+      benchmark:r.benchmark_id,profile:r.task_profile,dimension:r.dimension,metric:r.metric_id,
+      unit:r.unit,direction:r.direction,gap:r.gap_to_leader_native,
+      competitive_state:r.competitive_state,leader_state:r.leader_state,
+      currency:r.currency?.state,co_leaders:r.co_leaders||[],systems:observed,
+      context:{sample_count:r.sample_count,selection_id:r.selection_id,input_sha256:r.input_sha256,
+        comparison_set_id:r.comparison_set_id,adequacy:r.adequacy.state}
+    });
+  }
+  invariant(rows.length>0&&new Set(rows.map(r=>r.id)).size===rows.length,"empty or duplicated ranked rows");
+  const coverage=frontier.metric_coverage.map(x=>({
+    id:x.metric_key,benchmark:(x.benchmark_profile_id||"").split(":")[0],
+    dimension:x.dimension,metric:x.metric_id,state:x.state,
+  }));
+  invariant(coverage.every(x=>typeof x.id==="string"&&x.id),"invalid coverage registry");
+  return {schema_version:"public-docs-1",snapshot_id:frontier.snapshot_id,
+    source_commit:commit,source_projection_sha:"live-from-repository-main",
+    source_url:"https://github.com/MythologIQ-Labs-LLC/agent-memory/blob/main/reports/benchmarks/ui/frontier-leaderboards.json",
+    publication_note:"Read-only accepted same-harness projection fetched on page load; not a universal best-in-class claim.",
+    ranked_count:rows.length,metric_coverage_count:coverage.length,
+    comparison_row_counts:frontier.summary?.ranking_states||{},
+    ranked:rows,coverage};
+}
+async function fetchCurrent(){
+  try{
+    const response=await fetch(LIVE+"frontier-leaderboards.json",{cache:"no-store"});
+    if(!response.ok)throw Error("Live projection HTTP "+response.status);
+    const converted=fromFrontier(await response.json()); // Invalid live evidence never silently falls back.
+    return {data:converted,live:true};
+  }catch(error){
+    if(String(error.message).startsWith("Live evidence refused:"))throw error;
+    const fallback=await fetch(SNAPSHOT_FALLBACK,{cache:"no-store"});
+    if(!fallback.ok)throw Error("Live projection unavailable and historical fallback missing.");
+    return {data:await fallback.json(),live:false,reason:String(error.message)};
+  }
+}
+async function refreshSourceStatus(data){
+  const state=$("benchmark-source-state");
+  if(!state)return;
+  const get=await fetch(LIVE+"refresh-status.json",{cache:"no-store"}).catch(()=>null);
+  if(!get||!get.ok){state.textContent+=" Refresh manifest unavailable; newest remote evidence cannot be confirmed.";return;}
+  const manifest=await get.json();
+  if(manifest.schema_version!=="benchmark-refresh-status/1"||manifest.catalog_snapshot_id!==data.snapshot_id||
+     manifest.authority_effect!=="none"||manifest.accepted_evidence_only_in_rankings!==true){
+    state.textContent+=" Refresh manifest mismatch; additional evidence may not be reflected.";return;
+  }
+  state.textContent+=" Unregistered raw evidence sources: "+manifest.unregistered_source_count+
+   " (not counted as competitor wins). Manifest matches the accepted projection, but this is not live runtime verification.";
+}
+
 try{
- const response=await fetch("./benchmark-snapshot.json",{cache:"no-store"});if(!response.ok)throw Error("Evidence snapshot could not be loaded (HTTP "+response.status+").");
- const data=await response.json();
+ const loaded=await fetchCurrent();
+ const data=loaded.data;
+ const indicator=$("benchmark-source-state");
+ if(indicator) indicator.textContent=loaded.live?
+    "Latest accepted projection requested directly from Agent Memory main on this page load.":
+    "Historical fallback snapshot in use. Live projection unavailable ("+loaded.reason+"). Results may be stale.";
+ if(loaded.live) refreshSourceStatus(data).catch(err=>{if(indicator)indicator.textContent+=" Refresh status unavailable: "+String(err.message)});
+
  if(data.schema_version!=="public-docs-1"||typeof data.snapshot_id!=="string"||!Array.isArray(data.ranked)||!data.ranked.length||data.ranked_count!==data.ranked.length||!Array.isArray(data.coverage)||!/^([a-f0-9]{40})$/.test(data.source_commit))throw Error("Malformed or unexpected evidence snapshot, refused.");
  if(data.ranked.some(r=>r.systems.length<2||r.systems.some(s=>!Number.isFinite(s.value)||s.value<0)||!Number.isFinite(r.gap)||r.gap<0||r.context?.adequacy!=="threshold_not_established"))throw Error("Snapshot contains unqualified numerical claims, refused.");
  selectOptions($("benchmark-family"),data.ranked.map(r=>r.benchmark),v=>benchmarkNames[v]||v);
