@@ -81,7 +81,11 @@ def main() -> None:
     memory_page = (ROOT / "agent-memory" / "index.html").read_text(encoding="utf-8")
     assert 'id="benchmark-grid"' in memory_page
     assert 'id="benchmark-coverage-list"' in memory_page
-    assert "PR #787" in memory_page
+    assert 'id="benchmark-source-state"' in memory_page, "live benchmark provenance status missing"
+    assert "evidence-linked" in memory_page.lower(), "public page must explain direct evidence source"
+    assert "Live evidence refused:" in chart_renderer, "malformed live projections must fail closed"
+    assert "frontier-leaderboards.json" in chart_renderer and "raw.githubusercontent.com" in chart_renderer, "live source refresh not configured"
+    assert 'SNAPSHOT_FALLBACK="./benchmark-snapshot.json"' in chart_renderer, "historical fallback must be explicit"
     assert 'id="benchmark-peer-coverage"' in memory_page, "measured peer disclosure missing"
     assert 'id="benchmark-peer-by-family"' in memory_page, "family peer coverage missing"
     assert "/agent-memory/issues/789" in memory_page, "peer expansion program link missing"
