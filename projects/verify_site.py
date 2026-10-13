@@ -64,10 +64,27 @@ def main() -> None:
         expected_gap = agent - best if row["direction"] in {"lower_better", "zero_target"} else best - agent
         assert math.isclose(row["gap"], expected_gap, abs_tol=1e-8), row["id"]
         assert row["currency"] in {"current", "superseded", "newer_unaccepted_evidence", "undetermined"}
+    external_peers = {
+        s["id"] for row in snap["ranked"] for s in row["systems"]
+        if s["role"] == "external_competitor"
+    }
+    lexical_controls = {
+        s["id"] for row in snap["ranked"] for s in row["systems"]
+        if s["role"] == "control"
+    }
+    assert external_peers.isdisjoint(lexical_controls), "competitors cannot be counted as lexical controls"
+    assert external_peers, "empty external competitor set cannot imply competitive breadth"
+    assert len(external_peers) <= len(snap["ranked"]), "impossible external population"
+    chart_renderer = (ROOT / "benchmark.js").read_text(encoding="utf-8")
+    assert 'systemIds("external_competitor"' in chart_renderer, "external competitor coverage missing"
+    assert 'systemIds("control"' in chart_renderer, "control coverage missing"
     memory_page = (ROOT / "agent-memory" / "index.html").read_text(encoding="utf-8")
     assert 'id="benchmark-grid"' in memory_page
     assert 'id="benchmark-coverage-list"' in memory_page
     assert "PR #787" in memory_page
+    assert 'id="benchmark-peer-coverage"' in memory_page, "measured peer disclosure missing"
+    assert 'id="benchmark-peer-by-family"' in memory_page, "family peer coverage missing"
+    assert "/agent-memory/issues/789" in memory_page, "peer expansion program link missing"
     print(f"PASS: {len(catalog)} pages, {len(snap['ranked'])} native charts, "
           f"{len(snap['coverage'])} coverage definitions, all gap arithmetic consistent")
 
