@@ -107,7 +107,10 @@ async function fetchCurrent(){
   try{
     const response=await fetch(LIVE+"frontier-leaderboards.json",{cache:"no-store"});
     if(!response.ok)throw Error("Live projection HTTP "+response.status);
-    const converted=fromFrontier(await response.json()); // Invalid live evidence never silently falls back.
+    let parsed;
+    try { parsed=await response.json(); }
+    catch (_) { throw Error("Live evidence refused: invalid JSON from accepted source"); }
+    const converted=fromFrontier(parsed); // Invalid live evidence never silently falls back.
     return {data:converted,live:true};
   }catch(error){
     if(String(error.message).startsWith("Live evidence refused:"))throw error;
