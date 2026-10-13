@@ -19,12 +19,12 @@ top.textContent=p.name;
 document.getElementById("project-subtitle").textContent=p.subtitle;
 document.getElementById("project-summary").textContent=p.summary;
 const actions=document.getElementById("project-actions");
-if(p.repo)actions.append(link("https://github.com/MythologIQ-Labs-LLC/"+encodeURIComponent(p.repo),"View source repository ↗","btn primary"));
+if(p.repo||p.repoUrl)actions.append(link(p.repoUrl||("https://github.com/MythologIQ-Labs-LLC/"+encodeURIComponent(p.repo)),"View source repository ↗","btn primary"));
 if(p.site)actions.append(link(p.site,"Product overview ↗",p.repo?"btn":"btn primary"));
 if(p.feature==="benchmarks")actions.append(link("#benchmarks","Explore benchmark leaderboard ↓","btn"));
 for(const [key,items] of [["principles",p.principles],["goals",p.goals],["integrations",p.integrations],["benchmark-info",p.benchmarks]]){const target=document.getElementById("list-"+key);for(const v of items)target.append(el("li","",v))}
 const links=document.getElementById("source-links");
-if(p.repo){links.append(link("https://github.com/MythologIQ-Labs-LLC/"+encodeURIComponent(p.repo),"Repository"));links.append(document.createTextNode(" · "));links.append(link("https://github.com/MythologIQ-Labs-LLC/"+encodeURIComponent(p.repo)+"/issues","Development issues"))}
+if(p.repo||p.repoUrl){const url=p.repoUrl||("https://github.com/MythologIQ-Labs-LLC/"+encodeURIComponent(p.repo));links.append(link(url,"Repository"));links.append(document.createTextNode(" · "));links.append(link(url+"/issues","Development issues"))}
 else{links.append(el("span","muted","Source code is not linked publicly for this product."))}
 if(p.feature==="benchmarks"){const section=document.getElementById("benchmarks");section.hidden=false;const script=document.createElement("script");script.src="../benchmark.js";script.defer=true;document.body.append(script)}
 }
